@@ -1,0 +1,100 @@
+/* Assuming your CSS file is imported or this style is included directly in the component */
+
+.job_post {
+    padding: 20px;
+    background-color: #f5f6f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  
+  .container {
+    max-width: 600px;
+    width: 100%;
+    background-color: #ffffff;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+  }
+  
+  .container h3 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .wrapper {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .salary_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .ranged_salary {
+    display: flex;
+    gap: 15px;
+  }
+  
+  input[type="text"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  select {
+    color: #666;
+  }
+  
+  input::placeholder,
+  textarea::placeholder {
+    color: #aaa;
+  }
+  
+  textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+  
+  button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+  
+  @media (max-width: 768px) {
+    .wrapper {
+      flex-direction: column;
+    }
+  
+    .ranged_salary {
+      flex-direction: column;
+    }
+  }
+  
