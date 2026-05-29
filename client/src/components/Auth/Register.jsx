@@ -8,7 +8,7 @@ import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Context } from "../../main";
-import '../css/Register.css';
+import '../Css/Register.css'
 
 const Register = () => {
   const [email, setEmail] = useState("");

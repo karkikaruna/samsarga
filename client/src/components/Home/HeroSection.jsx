@@ -33,16 +33,12 @@ const HeroSection = () => {
       <div className="heroSection">
         <div className="container">
           <div className="title">
-            <h1>Find your dream job</h1>
-            <h1>Based on your interests and skills</h1>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem
-              voluptate repellat modi quidem aliquid eaque ducimus ipsa et,
-              facere mollitia!
-            </p>
+            <h1>Find your dream job or Hire best Candidate </h1>
+            <h1>Everyone deserves to get the information flow beter</h1>
+            
           </div>
           <div className="image">
-            <img src="/jobboardhero.jpeg" alt="hero" />
+            <img src="/jobboard.svg" alt="hero" />
           </div>
         </div>
         <div className="details">
