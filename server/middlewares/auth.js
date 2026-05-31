@@ -6,11 +6,21 @@ import jwt from "jsonwebtoken";
 export const isAuthenticated = catchAsyncErrors(async (req, res, next) => {
   const { token } = req.cookies;
   if (!token) {
-    return next(new ErrorHandler("User Not Authorized", 401));
+    return next(new ErrorHandler("Please login to access this resource.", 401));
   }
-  const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
-  req.user = await User.findById(decoded.id);
+  let decoded;
+  try {
+    decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+  } catch (err) {
+    return next(new ErrorHandler("Invalid or expired token. Please login again.", 401));
+  }
 
+  const user = await User.findById(decoded.id);
+  if (!user) {
+    return next(new ErrorHandler("User no longer exists.", 401));
+  }
+
+  req.user = user;
   next();
 });

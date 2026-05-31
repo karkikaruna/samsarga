@@ -5,134 +5,97 @@ import { Job } from "../models/jobSchema.js";
 import cloudinary from "cloudinary";
 
 export const postApplication = catchAsyncErrors(async (req, res, next) => {
-  const { role } = req.user;
-  if (role === "Employer") {
-    return next(
-      new ErrorHandler("Only job seekers can post application.", 400)
-    );
+  if (req.user.role === "Employer") {
+    return next(new ErrorHandler("Employers cannot submit applications.", 400));
   }
+
   if (!req.files || Object.keys(req.files).length === 0) {
-    return next(new ErrorHandler("Resume File Required!", 400));
+    return next(new ErrorHandler("Please upload a resume file.", 400));
   }
 
   const { resume } = req.files;
-  const allowedFormats = ["image/png", "image/jpeg", "image/webp"];
+  const allowedFormats = ["image/png", "image/jpeg", "image/webp", "application/pdf"];
   if (!allowedFormats.includes(resume.mimetype)) {
-    return next(
-      new ErrorHandler("Invalid file type. Please upload a .png , .jpg or .webp resume file.", 400)
-    );
+    return next(new ErrorHandler("Invalid file type. Please upload a PNG, JPG, WEBP, or PDF.", 400));
   }
-  const cloudinaryResponse = await cloudinary.uploader.upload(
-    resume.tempFilePath
-  );
+
+  const cloudinaryResponse = await cloudinary.v2.uploader.upload(resume.tempFilePath, {
+    folder: "job_board_resumes",
+  });
 
   if (!cloudinaryResponse || cloudinaryResponse.error) {
-    console.error(
-      "Cloudinary Error:",
-      cloudinaryResponse.error || "Unknown Cloudinary error"
-    );
-    return next(new ErrorHandler("Failed to upload Resume to Cloudinary", 500));
-  }
-  const { name, email, coverLetter, phone, address, jobId } = req.body;
-  const applicantID = {
-    user: req.user._id,
-    role: "Job Seeker",
-  };
-  if (!jobId) {
-    return next(new ErrorHandler("Job not found!", 404));
-  }
-  const jobDetails = await Job.findById(jobId);
-  if (!jobDetails) {
-    return next(new ErrorHandler("Job not found!", 404));
+    return next(new ErrorHandler("Failed to upload resume. Please try again.", 500));
   }
 
-  const employerID = {
-    user: jobDetails.postedBy,
-    role: "Employer",
-  };
-  if (
-    !name ||
-    !email ||
-    !coverLetter ||
-    !phone ||
-    !address ||
-    !applicantID ||
-    !employerID ||
-    !resume
-  ) {
-    return next(new ErrorHandler("Please fill all fields.", 400));
+  const { name, email, coverLetter, phone, address, jobId } = req.body;
+
+  if (!name || !email || !coverLetter || !phone || !address || !jobId) {
+    return next(new ErrorHandler("Please fill in all required fields.", 400));
   }
+
+  const jobDetails = await Job.findById(jobId);
+  if (!jobDetails) {
+    return next(new ErrorHandler("Job not found.", 404));
+  }
+
+  const existing = await Application.findOne({
+    "applicantID.user": req.user._id,
+    "employerID.user": jobDetails.postedBy,
+  });
+  if (existing) {
+    return next(new ErrorHandler("You have already applied for this job.", 400));
+  }
+
   const application = await Application.create({
-    name,
-    email,
-    coverLetter,
-    phone,
-    address,
-    applicantID,
-    employerID,
+    name, email, coverLetter, phone, address,
+    applicantID: { user: req.user._id, role: "Job Seeker" },
+    employerID:  { user: jobDetails.postedBy, role: "Employer" },
     resume: {
       public_id: cloudinaryResponse.public_id,
       url: cloudinaryResponse.secure_url,
     },
   });
-  res.status(200).json({
+
+  res.status(201).json({
     success: true,
-    message: "Application Submitted!",
+    message: "Application submitted successfully!",
     application,
   });
 });
-//application posted by jobseeker seen by employer
-export const employerGetAllApplications = catchAsyncErrors(
-  async (req, res, next) => {
-    const { role } = req.user;
-    if (role === "Job Seeker") {
-      return next(
-        new ErrorHandler("Job Seeker not allowed to access this resource.", 400)
-      );
-    }
-    const { _id } = req.user;
-    const applications = await Application.find({ "employerID.user": _id });
-    res.status(200).json({
-      success: true,
-      applications,
-    });
+
+export const employerGetAllApplications = catchAsyncErrors(async (req, res, next) => {
+  if (req.user.role === "Job Seeker") {
+    return next(new ErrorHandler("Job Seekers cannot access this resource.", 400));
   }
-);
-//job seeeker can see how many or which company it has apply for jobs
-export const jobseekerGetAllApplications = catchAsyncErrors(
-  async (req, res, next) => {
-    const { role } = req.user;
-    if (role === "Employer") {
-      return next(
-        new ErrorHandler("Employer are not allowed to access this resource.", 400)
-      );
-    }
-    const { _id } = req.user;
-    const applications = await Application.find({ "applicantID.user": _id });
-    res.status(200).json({
-      success: true,
-      applications,
-    });
+  const applications = await Application.find({ "employerID.user": req.user._id });
+  res.status(200).json({ success: true, applications });
+});
+
+export const jobseekerGetAllApplications = catchAsyncErrors(async (req, res, next) => {
+  if (req.user.role === "Employer") {
+    return next(new ErrorHandler("Employers cannot access this resource.", 400));
   }
-);
-// application cannot be deleted by employer it can only be deleted by jobseekers
-export const jobseekerDeleteApplication = catchAsyncErrors(
-  async (req, res, next) => {
-    const { role } = req.user;
-    if (role === "Employer") {
-      return next(
-        new ErrorHandler("You donot have any application to delete!", 400)
-      );
-    }
-    const { id } = req.params;
-    const application = await Application.findById(id);
-    if (!application) {
-      return next(new ErrorHandler("Application not found!", 404));
-    }
-    await application.deleteOne();
-    res.status(200).json({
-      success: true,
-      message: "Application Deleted!",
-    });
+  const applications = await Application.find({ "applicantID.user": req.user._id });
+  res.status(200).json({ success: true, applications });
+});
+
+export const jobseekerDeleteApplication = catchAsyncErrors(async (req, res, next) => {
+  if (req.user.role === "Employer") {
+    return next(new ErrorHandler("Employers cannot delete applications.", 400));
   }
-);
+  const application = await Application.findById(req.params.id);
+  if (!application) {
+    return next(new ErrorHandler("Application not found.", 404));
+  }
+
+  if (application.applicantID.user.toString() !== req.user._id.toString()) {
+    return next(new ErrorHandler("You are not authorised to delete this application.", 403));
+  }
+
+  if (application.resume?.public_id) {
+    await cloudinary.v2.uploader.destroy(application.resume.public_id);
+  }
+
+  await application.deleteOne();
+  res.status(200).json({ success: true, message: "Application deleted successfully!" });
+});

@@ -47,14 +47,14 @@ const jobSchema = new mongoose.Schema({
   },
   expired: {
     type: Boolean,
-    default: false,//not expired
+    default: false,
   },
   jobPostedOn: {
     type: Date,
     default: Date.now,
   },
   postedBy: {
-    type: mongoose.Schema.ObjectId,//does not point directly through name
+    type: mongoose.Schema.ObjectId,
     ref: "User",
     required: true,
   },

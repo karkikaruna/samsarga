@@ -1,47 +1,47 @@
-import express from 'express';
+import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import cookieParser from 'cookie-parser'; 
-import fileUpload from 'express-fileupload'; 
-import userRouter from './routes/userRouter.js';
-import applicationRouter from './routes/applicationRouter.js';
-import jobRouter from './routes/jobRouter.js';
-import {dbConnection} from './database/dbConnection.js';
-import {errorMiddleware} from './middlewares/error.js';
-
-
-// Create an instance of express
-const app = express();
+import cookieParser from "cookie-parser";
+import fileUpload from "express-fileupload";
+import userRouter from "./routes/userRouter.js";
+import applicationRouter from "./routes/applicationRouter.js";
+import jobRouter from "./routes/jobRouter.js";
+import { dbConnection } from "./database/dbConnection.js";
+import { errorMiddleware } from "./middlewares/error.js";
 
 dotenv.config({ path: "./config/config.env" });
 
-app.use(cors({
-    origin: [process.env.FRONTEND_URL],
-    methods: ['GET', 'POST', 'DELETE', 'PUT'],
-    credentials: true,  // Fixed spelling here
-}));
+const app = express();
 
-// Use middleware
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    methods: ["GET", "POST", "DELETE", "PUT"],
+    credentials: true,
+  })
+);
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// File upload configuration
 app.use(
-    fileUpload({
-        useTempFiles: true,
-        tempFileDir: "/temp",
-    })
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp", 
+  })
 );
-app.use('/api/v1/user', userRouter);
-app.use('/api/v1/application', applicationRouter);
-app.use('/api/v1/job', jobRouter);
+
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/application", applicationRouter);
+app.use("/api/v1/job", jobRouter);
+
+app.get("/health", (req, res) => {
+  res.status(200).json({ success: true, message: "Server is running" });
+});
 
 dbConnection();
 
 app.use(errorMiddleware);
 
-
-// Export the app as an ES module
 export default app;
-
