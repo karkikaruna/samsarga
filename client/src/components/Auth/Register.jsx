@@ -1,20 +1,19 @@
 import React, { useContext, useState } from "react";
-import { FaRegUser, FaBriefcase } from "react-icons/fa";
-import { FaPencilAlt, FaPhoneAlt } from "react-icons/fa";
+import { FaRegUser, FaPencilAlt, FaBriefcase } from "react-icons/fa";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { RiLock2Fill } from "react-icons/ri";
+import { FaPhoneFlip } from "react-icons/fa6";
 import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Context } from "../../main";
 
 const Register = () => {
-  const [email, setEmail]       = useState("");
-  const [name, setName]         = useState("");
-  const [phone, setPhone]       = useState("");
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole]         = useState("");
-
+  const [role, setRole] = useState("");
   const { isAuthorized, setIsAuthorized } = useContext(Context);
 
   const handleRegister = async (e) => {
@@ -28,99 +27,74 @@ const Register = () => {
       toast.success(data.message);
       setName(""); setEmail(""); setPassword(""); setPhone(""); setRole("");
       setIsAuthorized(true);
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Registration failed");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Registration failed");
     }
   };
 
   if (isAuthorized) return <Navigate to="/" />;
 
   const fields = [
-    {
-      label: "Register As",
-      content: (
-        <div className="relative">
-          <select value={role} onChange={(e) => setRole(e.target.value)} className="fb-input appearance-none pr-8" required>
-            <option value="">Select Role</option>
-            <option value="Employer">Employer</option>
-            <option value="Job Seeker">Job Seeker</option>
-          </select>
-          <FaRegUser className="absolute right-3 top-1/2 -translate-y-1/2 text-fb-muted pointer-events-none text-sm" />
-        </div>
-      ),
-    },
-    {
-      label: "Full Name",
-      content: (
-        <div className="relative">
-          <input type="text" placeholder="Your full name" value={name} onChange={(e) => setName(e.target.value)} className="fb-input pr-8" required />
-          <FaPencilAlt className="absolute right-3 top-1/2 -translate-y-1/2 text-fb-muted pointer-events-none text-sm" />
-        </div>
-      ),
-    },
-    {
-      label: "Email Address",
-      content: (
-        <div className="relative">
-          <input type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} className="fb-input pr-8" required />
-          <MdOutlineMailOutline className="absolute right-3 top-1/2 -translate-y-1/2 text-fb-muted pointer-events-none" />
-        </div>
-      ),
-    },
-    {
-      label: "Phone Number",
-      content: (
-        <div className="relative">
-          <input type="tel" placeholder="+1 234 567 8900" value={phone} onChange={(e) => setPhone(e.target.value)} className="fb-input pr-8" required />
-          <FaPhoneAlt className="absolute right-3 top-1/2 -translate-y-1/2 text-fb-muted pointer-events-none text-sm" />
-        </div>
-      ),
-    },
-    {
-      label: "Password",
-      content: (
-        <div className="relative">
-          <input type="password" placeholder="Create a strong password" value={password} onChange={(e) => setPassword(e.target.value)} className="fb-input pr-8" required />
-          <RiLock2Fill className="absolute right-3 top-1/2 -translate-y-1/2 text-fb-muted pointer-events-none" />
-        </div>
-      ),
-    },
+    { label: "Register As", icon: <FaRegUser />, element: (
+      <select value={role} onChange={(e) => setRole(e.target.value)} className="w-full pl-9 pr-3 py-2.5 border border-[#CED0D4] rounded-lg text-sm bg-white focus:outline-none focus:border-[#1877F2] focus:ring-2 focus:ring-[#1877F2]/20 transition">
+        <option value="">Select Role</option>
+        <option value="Employer">Employer</option>
+        <option value="Job Seeker">Job Seeker</option>
+      </select>
+    )},
+    { label: "Full Name", icon: <FaPencilAlt />, element: (
+      <input type="text" placeholder="Your full name" value={name} onChange={(e) => setName(e.target.value)} className="w-full pl-9 pr-3 py-2.5 border border-[#CED0D4] rounded-lg text-sm focus:outline-none focus:border-[#1877F2] focus:ring-2 focus:ring-[#1877F2]/20 transition" />
+    )},
+    { label: "Email Address", icon: <MdOutlineMailOutline />, element: (
+      <input type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full pl-9 pr-3 py-2.5 border border-[#CED0D4] rounded-lg text-sm focus:outline-none focus:border-[#1877F2] focus:ring-2 focus:ring-[#1877F2]/20 transition" />
+    )},
+    { label: "Phone Number", icon: <FaPhoneFlip />, element: (
+      <input type="number" placeholder="Your phone number" value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full pl-9 pr-3 py-2.5 border border-[#CED0D4] rounded-lg text-sm focus:outline-none focus:border-[#1877F2] focus:ring-2 focus:ring-[#1877F2]/20 transition" />
+    )},
+    { label: "Password", icon: <RiLock2Fill />, element: (
+      <input type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full pl-9 pr-3 py-2.5 border border-[#CED0D4] rounded-lg text-sm focus:outline-none focus:border-[#1877F2] focus:ring-2 focus:ring-[#1877F2]/20 transition" />
+    )},
   ];
 
   return (
-    <div className="min-h-screen bg-fb-surface flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-6">
-          <div className="w-14 h-14 bg-fb-primary rounded-full flex items-center justify-center mx-auto mb-3">
-            <FaBriefcase className="text-white text-2xl" />
-          </div>
-          <h1 className="text-2xl font-bold text-fb-text">Create account</h1>
-          <p className="text-fb-muted text-sm mt-1">Join JobBoard — it's free</p>
-        </div>
+    <div className="min-h-screen bg-[#f0f2f5] flex flex-col items-center justify-center px-4 py-12">
+      <div className="mb-6 text-center">
+        <FaBriefcase className="text-[#1877F2] text-4xl mx-auto mb-2" />
+        <h1 className="text-2xl font-bold text-[#050505]">Create your account</h1>
+        <p className="text-[#65676B] text-sm mt-1">Join thousands of job seekers and employers</p>
+      </div>
 
-        <div className="fb-card p-6 shadow-fb-hover">
-          <form onSubmit={handleRegister} className="flex flex-col gap-4">
-            {fields.map((f) => (
-              <div key={f.label}>
-                <label className="block text-xs font-semibold text-fb-muted mb-1.5 uppercase tracking-wide">
-                  {f.label}
-                </label>
-                {f.content}
+      <div className="w-full max-w-sm bg-white rounded-xl shadow-md border border-[#CED0D4] p-6">
+        <form onSubmit={handleRegister} className="space-y-4">
+          {fields.map((f) => (
+            <div key={f.label}>
+              <label className="block text-xs font-semibold text-[#65676B] mb-1.5 uppercase tracking-wide">
+                {f.label}
+              </label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#65676B] text-sm pointer-events-none">
+                  {f.icon}
+                </span>
+                {f.element}
               </div>
-            ))}
-            <button type="submit" className="btn-accent w-full mt-1 py-3 text-base">
-              Create Account
-            </button>
-          </form>
+            </div>
+          ))}
 
-          <div className="mt-4 text-center border-t border-fb-border pt-4">
-            <p className="text-sm text-fb-muted">
-              Already have an account?{" "}
-              <Link to="/login" className="text-fb-primary font-semibold hover:underline">
-                Sign in
-              </Link>
-            </p>
-          </div>
+          <button
+            type="submit"
+            className="w-full bg-[#42B72A] hover:brightness-95 text-white font-semibold py-2.5 rounded-lg text-sm transition-all mt-2"
+          >
+            Create Account
+          </button>
+        </form>
+
+        <div className="mt-5 pt-5 border-t border-[#CED0D4] text-center">
+          <p className="text-sm text-[#65676B]">
+            Already have an account?{" "}
+            <Link to="/login" className="text-[#1877F2] font-semibold hover:underline">
+              Sign in
+            </Link>
+          </p>
         </div>
       </div>
     </div>

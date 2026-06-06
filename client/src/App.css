@@ -1,59 +1,23 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  *, *::before, *::after { box-sizing: border-box; }
-  body {
-    @apply bg-fb-surface text-fb-text font-fb m-0 p-0;
-  }
-  #root { min-height: 100vh; display: flex; flex-direction: column; }
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f0f2f5;
+}
+::-webkit-scrollbar-thumb {
+  background: #ced0d4;
+  border-radius: 3px;
 }
 
-@layer components {
-  /* ── Input / Select / Textarea shared look ── */
-  .fb-input {
-    @apply w-full bg-fb-surface border border-fb-border rounded-md px-3 py-2.5
-           text-fb-text placeholder-fb-muted text-sm
-           focus:outline-none focus:ring-2 focus:ring-fb-primary/40 focus:border-fb-primary
-           transition duration-150;
-  }
-  .fb-input:disabled {
-    @apply opacity-60 cursor-not-allowed bg-fb-surface/60;
-  }
-
-  /* ── Buttons ── */
-  .btn-primary {
-    @apply bg-fb-primary hover:bg-fb-dark active:bg-fb-deeper
-           text-white font-semibold text-sm px-5 py-2.5 rounded-md
-           transition-colors duration-150 cursor-pointer;
-  }
-  .btn-accent {
-    @apply bg-fb-accent hover:bg-fb-accentDk
-           text-white font-semibold text-sm px-5 py-2.5 rounded-md
-           transition-colors duration-150 cursor-pointer;
-  }
-  .btn-danger {
-    @apply bg-fb-danger/10 hover:bg-fb-danger/20
-           text-fb-danger font-semibold text-sm px-4 py-2 rounded-md
-           border border-fb-danger/30
-           transition-colors duration-150 cursor-pointer;
-  }
-  .btn-ghost {
-    @apply bg-fb-light hover:bg-fb-border
-           text-fb-primary font-semibold text-sm px-4 py-2 rounded-md
-           transition-colors duration-150 cursor-pointer;
-  }
-
-  /* ── Card ── */
-  .fb-card {
-    @apply bg-fb-panel rounded-lg border border-fb-border shadow-fb-card;
-  }
-
-  /* ── Section heading ── */
-  .section-title {
-    @apply text-xl font-bold text-fb-text mb-6 relative pb-2
-           after:absolute after:left-0 after:bottom-0
-           after:w-10 after:h-0.5 after:bg-fb-primary after:rounded;
-  }
+body {
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: #f0f2f5;
+  color: #050505;
+  -webkit-font-smoothing: antialiased;
 }

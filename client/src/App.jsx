@@ -21,45 +21,42 @@ const App = () => {
   const { isAuthorized, setIsAuthorized, setUser } = useContext(Context);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:4000/api/v1/user/getuser", { withCredentials: true })
-      .then((res) => { setUser(res.data.user); setIsAuthorized(true); })
-      .catch(() => setIsAuthorized(false));
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:4000/api/v1/user/getuser",
+          { withCredentials: true }
+        );
+        setUser(response.data.user);
+        setIsAuthorized(true);
+      } catch (error) {
+        setIsAuthorized(false);
+      }
+    };
+    fetchUser();
   }, [isAuthorized]);
 
   return (
-    <BrowserRouter>
-      <div className="flex flex-col min-h-screen font-fb">
+    <>
+      <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/login"           element={<Login />} />
-          <Route path="/register"        element={<Register />} />
-          <Route path="/"                element={<Home />} />
-          <Route path="/job/getall"      element={<Jobs />} />
-          <Route path="/job/:id"         element={<JobDetails />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/job/getall" element={<Jobs />} />
+       
+          <Route path="/job/post" element={<PostJob />} />
+          <Route path="/job/me" element={<MyJobs />} />
+          <Route path="/job/:id" element={<JobDetails />} />
           <Route path="/application/:id" element={<Application />} />
           <Route path="/applications/me" element={<MyApplications />} />
-          <Route path="/job/post"        element={<PostJob />} />
-          <Route path="/job/me"          element={<MyJobs />} />
-          <Route path="*"                element={<NotFound />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            style: {
-              background: "#fff",
-              color: "#050505",
-              border: "1px solid #CED0D4",
-              fontFamily: '"Segoe UI", system-ui, sans-serif',
-              fontSize: "14px",
-            },
-            success: { iconTheme: { primary: "#42B72A", secondary: "#fff" } },
-            error:   { iconTheme: { primary: "#E41E3F", secondary: "#fff" } },
-          }}
-        />
-      </div>
-    </BrowserRouter>
+        <Toaster />
+      </BrowserRouter>
+    </>
   );
 };
 

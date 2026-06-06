@@ -8,22 +8,11 @@ const Footer = () => {
   if (!isAuthorized) return null;
 
   return (
-    <footer className="bg-fb-panel border-t border-fb-border mt-auto">
-      <div className="max-w-6xl mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div className="flex items-center gap-2 text-fb-muted text-sm">
-          <FaBriefcase className="text-fb-primary" />
-          <span>© {new Date().getFullYear()} JobBoard. All rights reserved.</span>
-        </div>
-        <div className="flex items-center gap-4">
-          <Link
-            to="https://www.linkedin.com/company/codsoft/posts/?feedView=all"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-fb-muted hover:text-fb-primary transition-colors text-xl"
-            aria-label="LinkedIn"
-          >
-            <FaLinkedin />
-          </Link>
+    <footer className="bg-[#18191c] text-[#b0b3b8] mt-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="flex items-center gap-2 text-sm">
+          <FaBriefcase className="text-[#1877F2]" />
+          <span>© {new Date().getFullYear()} samsarga. All rights reserved.</span>
         </div>
       </div>
     </footer>

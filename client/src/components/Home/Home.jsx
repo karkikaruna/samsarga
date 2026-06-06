@@ -6,7 +6,7 @@ import PopularCompanies from "./PopularCompanies";
 
 const Home = () => {
   return (
-    <main className="flex-1">
+    <main className="min-h-screen">
       <HeroSection />
       <HowItWorks />
       <PopularCategories />

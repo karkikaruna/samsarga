@@ -2,31 +2,55 @@ class ErrorHandler extends Error {
   constructor(message, statusCode) {
     super(message);
     this.statusCode = statusCode;
+    this.isOperational = true;
   }
 }
 
 export const errorMiddleware = (err, req, res, next) => {
-  err.message = err.message || "Internal Server Error";
-  err.statusCode = err.statusCode || 500;
 
+  console.error(`[ERROR] ${err.name || "Error"}: ${err.message}`);
+
+  let statusCode = err.statusCode || 500;
+  let message = "Internal Server Error";
+
+  
+  if (err.isOperational) {
+    message = err.message;
+  }
+
+  
   if (err.name === "CastError") {
-    const message = `Resource not found. Invalid ${err.path}`;
-    err = new ErrorHandler(message, 400);
-  }
-  if (err.code === 11000) {
-    const message = `Duplicate field: ${Object.keys(err.keyValue).join(", ")}`;
-    err = new ErrorHandler(message, 400);
-  }
-  if (err.name === "JsonWebTokenError") {
-    err = new ErrorHandler("Invalid token, please log in again.", 401);
-  }
-  if (err.name === "TokenExpiredError") {
-    err = new ErrorHandler("Token expired, please log in again.", 401);
+    statusCode = 400;
+    message = "Invalid resource ID.";
   }
 
-  return res.status(err.statusCode).json({
+  if (err.code === 11000) {
+    statusCode = 400;
+    const field = Object.keys(err.keyValue || {})[0] || "field";
+    message = `An account with this ${field} already exists.`;
+  }
+
+  if (err.name === "JsonWebTokenError") {
+    statusCode = 400;
+    message = "Invalid session. Please log in again.";
+  }
+
+  if (err.name === "TokenExpiredError") {
+    statusCode = 401;
+    message = "Your session has expired. Please log in again.";
+  }
+
+  if (err.name === "ValidationError") {
+    statusCode = 400;
+
+    message = Object.values(err.errors || {})
+      .map((e) => e.message)
+      .join(", ");
+  }
+
+  return res.status(statusCode).json({
     success: false,
-    message: err.message,
+    message,
   });
 };
 

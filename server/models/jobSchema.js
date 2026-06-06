@@ -54,7 +54,7 @@ const jobSchema = new mongoose.Schema({
     default: Date.now,
   },
   postedBy: {
-    type: mongoose.Schema.ObjectId,
+    type: mongoose.Schema.ObjectId,//does not point directly through name
     ref: "User",
     required: true,
   },

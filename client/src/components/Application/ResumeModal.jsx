@@ -1,26 +1,25 @@
 import React from "react";
-import { RxCross2 } from "react-icons/rx";
 
 const ResumeModal = ({ imageUrl, onClose }) => {
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4"
+      className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
       onClick={onClose}
     >
       <div
-        className="relative bg-fb-panel rounded-xl shadow-fb-modal max-w-2xl w-full max-h-[90vh] overflow-auto"
+        className="relative bg-white rounded-xl overflow-hidden max-w-xl w-full shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-fb-surface hover:bg-fb-border text-fb-text transition-colors"
-          aria-label="Close"
-        >
-          <RxCross2 />
-        </button>
-        <div className="p-4 pt-12">
-          <img src={imageUrl} alt="Resume" className="w-full rounded-lg" />
+        <div className="flex items-center justify-between px-4 py-3 border-b border-[#CED0D4]">
+          <span className="font-semibold text-sm text-[#050505]">Resume Preview</span>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#f0f2f5] text-[#65676B] hover:text-[#050505] text-xl transition-colors"
+          >
+            ×
+          </button>
         </div>
+        <img src={imageUrl} alt="Resume" className="w-full h-auto max-h-[75vh] object-contain" />
       </div>
     </div>
   );
