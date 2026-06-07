@@ -4,9 +4,9 @@ import { SiTesla } from "react-icons/si";
 import { Link } from "react-router-dom";
 
 const companies = [
-  { id: 1, title: "Microsoft", location: "Redmond, WA — USA",      openPositions: 10, icon: <FaMicrosoft /> },
-  { id: 2, title: "Tesla",     location: "Austin, TX — USA",        openPositions: 5,  icon: <SiTesla /> },
-  { id: 3, title: "Apple",     location: "Cupertino, CA — USA",     openPositions: 20, icon: <FaApple /> },
+  { id: 1, title: "Fusemachines", location: "Kathmandu, Nepal",      openPositions: 10},
+  { id: 2, title: "ABC Company",     location: "Kathmandu, Nepal",        openPositions: 5},
+  { id: 3, title: "Neural AI",    location: "Kathmandu ,Nepal",     openPositions: 20},
 ];
 
 const PopularCompanies = () => {
