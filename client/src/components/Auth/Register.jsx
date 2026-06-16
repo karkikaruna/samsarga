@@ -43,10 +43,10 @@ const Register = () => {
       </select>
     )},
     { label: "Full Name", icon: <FaPencilAlt />, element: (
-      <input type="text" placeholder="Your full name" value={name} onChange={(e) => setName(e.target.value)} className="w-full pl-9 pr-3 py-2.5 border border-[#CED0D4] rounded-lg text-sm focus:outline-none focus:border-[#1877F2] focus:ring-2 focus:ring-[#1877F2]/20 transition" />
+      <input type="text" placeholder="Enter your Full Name" value={name} onChange={(e) => setName(e.target.value)} className="w-full pl-9 pr-3 py-2.5 border border-[#CED0D4] rounded-lg text-sm focus:outline-none focus:border-[#1877F2] focus:ring-2 focus:ring-[#1877F2]/20 transition" />
     )},
     { label: "Email Address", icon: <MdOutlineMailOutline />, element: (
-      <input type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full pl-9 pr-3 py-2.5 border border-[#CED0D4] rounded-lg text-sm focus:outline-none focus:border-[#1877F2] focus:ring-2 focus:ring-[#1877F2]/20 transition" />
+      <input type="email" placeholder="you@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full pl-9 pr-3 py-2.5 border border-[#CED0D4] rounded-lg text-sm focus:outline-none focus:border-[#1877F2] focus:ring-2 focus:ring-[#1877F2]/20 transition" />
     )},
     { label: "Phone Number", icon: <FaPhoneFlip />, element: (
       <input type="number" placeholder="Your phone number" value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full pl-9 pr-3 py-2.5 border border-[#CED0D4] rounded-lg text-sm focus:outline-none focus:border-[#1877F2] focus:ring-2 focus:ring-[#1877F2]/20 transition" />
